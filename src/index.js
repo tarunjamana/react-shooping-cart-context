@@ -4,12 +4,25 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Context from './context/Context';
+import {configureStore} from "@reduxjs/toolkit";
+import { Provider } from 'react-redux';
+import cartReducer from './features/product';
+import filterReducer from './features/filters';
+
+const store = configureStore({
+  reducer:{
+    cart:cartReducer,
+    filters:filterReducer
+  }
+})
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Context>
+    <Provider store={store}>
     <App />
+    </Provider>
     </Context>
   </React.StrictMode>
 );

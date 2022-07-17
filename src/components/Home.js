@@ -3,18 +3,23 @@ import { CartState } from '../context/Context';
 import Filters from './Filters';
 import SingleProduct from './SingleProduct';
 import './styles.css';
+import { useSelector} from 'react-redux';
 
 const Home = () => {
+    const productsRedux = useSelector((state) =>state.cart.value.products);
+    const {byStock,byFastDelivery,sort,byRating,searchQuery} =useSelector((state) =>state.filters.value);
+    console.log(productsRedux)
+    console.log(byStock,byFastDelivery,sort,byRating,searchQuery);
     const {
         state:{products},
-        productState:{byStock,byFastDelivery,sort,byRating,searchQuery}
+        // productState:{byStock,byFastDelivery,sort,byRating,searchQuery}
     } = CartState();
 
     const transformProducts = () =>{
-        let sortedProducts = products
+        let sortedProducts = productsRedux
 
         if(sort){
-            sortedProducts = sortedProducts.sort((a,b) =>(
+            sortedProducts = sortedProducts.slice().sort((a,b) =>(
                 sort==='lowToHigh'?a.price-b.price:b.price-a.price
             ))
         }

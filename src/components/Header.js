@@ -4,8 +4,17 @@ import { AiFillDelete } from 'react-icons/ai';
 import {FaShoppingCart} from 'react-icons/fa'
 import { Link } from 'react-router-dom';
 import { CartState } from '../context/Context';
+import { useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {removeFromCart} from '../features/product';
+import {filterBySearch} from '../features/filters';
 import "./styles.css";
 const Header = () => {
+
+    const cartRedux =useSelector((state) => state.cart.value.cart);
+    console.log(cartRedux);
+    const cartDispatch = useDispatch();
+    const filtersDispatch = useDispatch();
    const {
        state:{ cart},
        dispatch,
@@ -24,10 +33,11 @@ const Header = () => {
                         placeholder="Search a product" 
                         className="m-auto search" 
                         onChange={(e) =>{
-                            productDispatch({
-                                type:'FILTER_BY_SEARCH',
-                                payload:e.target.value
-                            })
+                            // productDispatch({
+                            //     type:'FILTER_BY_SEARCH',
+                            //     payload:e.target.value
+                            // })
+                            filtersDispatch(filterBySearch(e.target.value))
                         }}
                         />
                     </Navbar.Text>
@@ -35,12 +45,12 @@ const Header = () => {
                         <Dropdown alignRight>
                        <Dropdown.Toggle variant="success">
                        <FaShoppingCart color="white" fontSize="25px" />
-                       <Badge>{cart.length}</Badge>
+                       <Badge>{cartRedux.length}</Badge>
                        </Dropdown.Toggle>
                        <Dropdown.Menu>
-                           {cart.length > 0 ? (
+                           {cartRedux.length > 0 ? (
                                <>{
-                                   cart.map(prod => (
+                                   cartRedux.map(prod => (
                                        <span className="cartitem" key={prod.id}>
                                        <img
                                         src={prod.image}
@@ -55,10 +65,7 @@ const Header = () => {
                                         fontSize="20px"
                                         style={{cursor:"pointer"}}
                                         onClick={() =>
-                                            dispatch({
-                                                type:"REMOVE_FROM_CART",
-                                                payload:prod
-                                            })
+                                            cartDispatch(removeFromCart(prod))
                                         }
                                        />
                                        </span>

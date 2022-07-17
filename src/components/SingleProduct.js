@@ -1,9 +1,13 @@
 import React from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { CartState } from '../context/Context';
-import Rating from './Rating'
+import Rating from './Rating';
+import {useDispatch} from 'react-redux';
+import {addToCart,removeFromCart} from '../features/product';
 
 const SingleProduct = ({prod}) => {
+
+    const cartDispatch = useDispatch();
 
     const {state:{cart},
          dispatch
@@ -26,17 +30,19 @@ const SingleProduct = ({prod}) => {
                     </Card.Subtitle>
                     {cart.some(p=> p.id === prod.id) ? (
                     <Button onClick={() =>{
-                        dispatch({
-                            type:'REMOVE_FROM_CART',
-                            payload:prod
-                        })
+                        // dispatch({
+                        //     type:'REMOVE_FROM_CART',
+                        //     payload:prod
+                        // })
+                        cartDispatch(removeFromCart(prod))
                     }} variant="danger">Remove from Cart</Button>
                    ) : (
                         <Button onClick={() =>{
-                            dispatch({
-                                type:'ADD_TO_CART',
-                                payload:prod
-                            })
+                            // dispatch({
+                            //     type:'ADD_TO_CART',
+                            //     payload:prod
+                            // })
+                            cartDispatch(addToCart(prod))
                         }} disabled={!prod.inStock}>
                         {!prod.inStock ? "Out of Stock" : "Add to Cart"}
                       </Button>
